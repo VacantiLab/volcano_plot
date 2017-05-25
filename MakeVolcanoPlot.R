@@ -13,12 +13,14 @@ MakeVolcanoPlot <- function(data_location,group_divisions,group_designations_sch
 #group_divisions: this is a list of 2 lists defined using list(c(),c())
   #each member list contains the names of the groups as they are separated and grouped for analysis in the volcano plot
   #for example, if you are comparing basal tumors to her2, normal like, luminal a, and luminal b, group_divisions <- list(c('basal'),c('her2','normal like','luminal a','luminal b'))
+  #the ratio plotted will be group_divisions[[1]]/group_divisions[[2]]
 #Note: currently this function only plots -log10(p-value) vs. log2(ratio), where ratio is the median of the fist specified group division over the median of the second specified group division
 
 #Input where volcano plot is stored
 working_directory <- getwd()
 working_directory_up1 <- gsub('/[^/]*$','/',working_directory) #matches '/' followed by 0 or more characters other than '/' followed by the end of the string, and replaces with '/'
-volcano_directory <- paste(working_directory_up1,'/output/',sep='')
+volcano_directory <- paste(working_directory_up1,'output/',sep='')
+dir.create(volcano_directory)
 
 
 #Can specify a gene to label in red here:
