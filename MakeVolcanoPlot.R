@@ -15,10 +15,11 @@ MakeVolcanoPlot <- function(data_location,group_divisions,group_designations_sch
   #for example, if you are comparing basal tumors to her2, normal like, luminal a, and luminal b, group_divisions <- list(c('basal'),c('her2','normal like','luminal a','luminal b'))
 #Note: currently this function only plots -log10(p-value) vs. log2(ratio), where ratio is the median of the fist specified group division over the median of the second specified group division
 
-cd <- getwd()
-data_file <- paste(data_location,'quantities.txt',sep='/')
-volcano_directory <- paste(cd,'output/',sep='/')
-group_designations_file <- paste(data_location,'group_key.txt',sep='/')
+#Input where volcano plot is stored
+working_directory <- getwd()
+working_directory_up1 <- gsub('/[^/]*$','/',working_directory) #matches '/' followed by 0 or more characters other than '/' followed by the end of the string, and replaces with '/'
+volcano_directory <- paste(working_directory_up1,'/output/',sep='')
+
 
 #Can specify a gene to label in red here:
 genes_to_label <- NULL
@@ -33,6 +34,7 @@ if (!is.null(genes_to_label_file))
 }
 
 #Read the proteomics expression data
+data_file <- paste(data_location,'quantities.txt',sep='/')
 DATA <- read.table(file=data_file,head=TRUE,check.names=FALSE,sep='\t') #check.names=FALSE prevents an 'X' from being added to the numeric column names, I believe it also prevents underscores and dashes from being changed in the row names
 
 #Name the rows of the data frame as the genes given in the first column of the data frame
@@ -47,6 +49,7 @@ DATA <- DATA[has_no_na_row_indices,]
 gene_names <- rownames(DATA) #store the gene names
 
 #open the group designations file into a data frame
+group_designations_file <- paste(data_location,'group_key.txt',sep='/')
 GROUP_DESIGNATIONS <- read.table(file=group_designations_file,head=TRUE,check.names=FALSE,sep='\t',stringsAsFactors=FALSE) #check.names=FALSE prevents changing special characters
 RowNames <- as.character(GROUP_DESIGNATIONS[,1])
 rownames(GROUP_DESIGNATIONS) <- RowNames
